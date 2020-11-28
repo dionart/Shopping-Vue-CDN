@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
+  <link href="style.css" rel="stylesheet">
+  <link href="./styles/header/style.css" rel="stylesheet">
+  <link href="./styles/main/style.css" rel="stylesheet">
+  <link href="./styles/footer/style.css" rel="stylesheet">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
+  <div id="app" >
+    <v-app id="inspire">
+      <div >
+        <v-toolbar class="toolbar">
+          <img src="./assets/logo.png">
+            
+            <v-spacer></v-spacer>
+
+            <v-toolbar-items >
+                <v-btn text color="#FFF" @click.prevent="getProducts">
+                Products
+                </v-btn>
+                
+                <v-btn @click="dialog=true" text color="#FFF" >
+                 
+                  <v-badge left color="green">
+                      <span slot="badge">${{total}}</span>
+                      <v-icon style="margin-top: -5px;"color="#fff">{{basket}}</v-icon> <span style="color: white;">Basket</span>
+                  </v-badge>
+                </v-btn>
+
+            </v-toolbar-items>
+        </v-toolbar>
+      </div>
+
+      <div >
+        <v-carousel >
+          <v-carousel-item
+            v-for="(item,i) in items"
+            :key="i"
+            reverse-transition="fade-transition"
+            transition="fade-transition"
+          >
+          <img :src="item.src" class="carrousel-img"/>
+          
+          </v-carousel-item>
+        </v-carousel>
+      </div>
+
+      <div >
+        <div class = "products-btn" >
+          <v-btn
+            color="#0B0B0B"
+            large
+            elevation="10"
+            rounded
+            class="white--text"
+            @click.prevent="getProducts"
+          >
+          Our Products
+          </v-btn>
+        </div>
+        
+        <v-list class="list" two-line>
+          <v-layout class="row" row wrap>
+            <template v-for="(product, index) in products" >
+              <v-flex xs2 pa-1 :key="index">
+                <v-hover>
+                  <v-card slot-scope="{hover}" class="mx-auto" color="gray lighten-1" max-width="600" height='400' >
+                    <v-img :src="product.image" :aspect-ratio="16/9">
+                      <v-expand-transition>
+                        <div v-if="hover" class="d-flex transition-fast-in-fast-out draken-2 display-3 v-card--reveal display3 white--text" >
+                          ${{product.price}}
+                        </div>
+                      </v-expand-transition>
+                    </v-img>
+      
+                    <v-card-text class="pt-4" >
+                      <v-btn absolute color="#242424" class="white--text" fab medium right top @click.prevent="addProduct(product)">
+                        <v-icon>
+                          {{basket}}
+                        </v-icon>
+                      </v-btn>
+                      
+      
+                      <h3 class="display-1 font-weight-light  #1E1E1E--text mb-2">{{product.title}}</h3>
+                      <div class="font-weight-light mb-2">{{product.description}}</div>
+                      <div class="font-weight-light mb-2">Weight: {{product.weight}} g</div>
+      
+                    </v-card-text>
+                    
+                  </v-card>
+                </v-hover>
+              </v-flex>
+            </template>
+          </v-layout>
+        </v-list>
+      </div>
+      <v-divider light></v-divider>
+      <v-footer
+        padless
+      >
+        <v-card
+          flat
+          tile
+          class="white--text text-center"
+        >
+          <v-card-text>
+            <v-btn
+              v-for="icon in icons"
+              :key="icon"
+              class="mx-4 white--text"
+              icon
+              
+            >
+              <v-icon size="24px">
+                {{ icon }}
+              </v-icon>
+            </v-btn>
+          </v-card-text>
+
+  
+    
+        </v-card>
+      </v-footer>
+
+      <v-row justify="center">
+        <v-dialog
+          v-model="dialog"
+          width="750"
+        >
+          <v-card style="background-color: #0B0B0B;">
+            <v-container>
+              
+              <v-card-title class="white--text" style="justify-content: center;">Your basket</v-card-title>
+
+              <v-list two-line style="background-color: #0B0B0B;">
+                <template v-for="(param, index) in params">
+                  <v-list-item :key="param.id">
+                    <v-avatar
+                      size="40"
+                    >
+                      <img :src="param.image">
+                    </v-avatar>
+                    <v-divider></v-divider>
+                    <v-list-item-title class="white--text">{{param.title}}</v-list-item-title>
+                    
+                    <v-list-item-title class="white--text">
+                      {{param.price}}$
+                    </v-list-item-title>
+
+                  </v-list-item>
+                  <v-divider dark></v-divider>
+                 
+                </template>
+                
+              </v-list>
+        
+            </v-container>
+          </v-card>
+        </v-dialog>
+      </v-row>
+    </v-app>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data: () => ({
+        params:[],
+        products: [],
+        dialog:false,
+        icons: [
+          'mdi-facebook',
+          'mdi-linkedin',
+          'mdi-instagram',
+        ],
+        basket:"mdi-basket",
+        card:"mdi-credit-card",
+        drawer:false,
+        number:0,
+        total:0,
+        items: [
+        {
+          src: './assets/suit.jpg',
+        },
+        {
+          src: './assets/banner.jpg',
+        },
+        {
+          src: 'https://esacroatia.com/app/uploads/2016/03/tailor-made-tours.jpg',
+        },
+      ],
+        
+      }),
+      methods:{
+        getProducts() {
+          axios.get('http://localhost:3000/products').then((response)=>{
+            this.products = response.data;
+          })
+          window.scroll(0,500)
+        },
+        addProduct(type){
+          this.params.push(type)
+          console.log(this.params);
+          this.total = this.total + type.price;
+          this.number = this.number+1;
+          console.log(this.total);
+          
+        },
+      }
+    })
+  </script>
+
+
+</body>
+</html>
