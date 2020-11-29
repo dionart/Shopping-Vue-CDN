@@ -4,6 +4,7 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <link rel="icon" href="favicon.ico" />
 
   <link href="style.css" rel="stylesheet">
   <link href="./styles/header/style.css" rel="stylesheet">
@@ -13,17 +14,10 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Germanicos Bespoke Tailors</title>
 </head>
 <body>
-  <style>
-  html {
-    scroll-behavior: smooth;
-  }
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  </style>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
@@ -33,7 +27,7 @@
       <div >
         <v-toolbar class="toolbar">
           <a href="https://tailor.com.au/">
-            <img src="./assets/logo.png">
+            <img src="./assets/germanicos-white-logo.svg">
           </a>
             <v-spacer></v-spacer>
             <v-toolbar-items >
@@ -102,17 +96,17 @@
                         </v-expand-transition>
                       </v-img>
         
-                      <v-card-text class="pt-4" >
+                      <v-card-text class="pt-4" style="background-color: #2F2F2F;">
                         <v-btn style="z-index: 1;" absolute color="#242424" class="white--text" fab medium right top @click.prevent="addProduct(product)">
                           <v-icon @click="snackbarProduct=true">
                             {{icons.cartPlus}}
                           </v-icon>
                         </v-btn>
                         
-                        <h3 class="display-1 font-weight-light  #1E1E1E--text mb-2">{{product.title}}</h3>
+                        <h3 class="display-1 font-weight-light white--text mb-2">{{product.title}}</h3>
                         
-                        <div class="font-weight-light mb-2">{{product.description}}</div>
-                        <div class="font-weight-light mb-2">Weight: {{product.weight}} g</div>
+                        <div class="font-weight-light mb-2 white--text">{{product.description}}</div>
+                        <div class="font-weight-light mb-2 white--text">Weight: {{product.weight}} g</div>
         
                       </v-card-text>
                       
