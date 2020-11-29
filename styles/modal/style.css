@@ -1,0 +1,41 @@
+#inspire .card {
+  background-color: #0b0b0b;
+}
+
+#inspire .card .white--text {
+  justify-content: center;
+}
+
+#inspire .card .list-container {
+  background-color: #0b0b0b;
+}
+
+#inspire .card .list-container .avatar-container {
+  margin-right: 20px;
+}
+
+#inspire .card .white--text.total {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 50px;
+}
+
+#inspire .card .white--text.total .text.block {
+  display: block;
+}
+
+#inspire .card .checkout.container {
+  text-align: center;
+  padding-bottom: 15px;
+}
+
+#inspire .card .checkout.container .icon {
+  margin-right: 10px;
+}
+
+#inspire .card .emptyCart.container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding-bottom: 30px;
+}

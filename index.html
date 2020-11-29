@@ -9,13 +9,21 @@
   <link href="./styles/header/style.css" rel="stylesheet">
   <link href="./styles/main/style.css" rel="stylesheet">
   <link href="./styles/footer/style.css" rel="stylesheet">
+  <link href="./styles/modal/style.css" rel="stylesheet">
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
 <body>
-
+  <style>
+  html {
+    scroll-behavior: smooth;
+  }
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
@@ -24,36 +32,38 @@
     <v-app id="inspire">
       <div >
         <v-toolbar class="toolbar">
-          <img src="./assets/logo.png">
-            
+          <a href="https://tailor.com.au/">
+            <img src="./assets/logo.png">
+          </a>
             <v-spacer></v-spacer>
-
             <v-toolbar-items >
+                <v-btn href="https://tailor.com.au/" text color="#FFF">
+                  Website
+                </v-btn>
                 <v-btn text color="#FFF" @click.prevent="getProducts">
-                Products
+                  Products
                 </v-btn>
                 
                 <v-btn @click="dialog=true" text color="#FFF" >
-                 
-                  <v-badge left color="green">
-                      <span slot="badge">${{total}}</span>
-                      <v-icon style="margin-top: -5px;"color="#fff">{{basket}}</v-icon> <span style="color: white;">Basket</span>
+                  <v-badge  style="margin-left: 15px;" left color="green">
+                      <v-icon style="margin-top: -5px;"color="#fff">{{icons.cart}}</v-icon> 
+                      <span style="color: white;">Your Cart</span>
+                      <span slot="badge">${{discountFlag ? totalDiscount : total }}</span>
                   </v-badge>
                 </v-btn>
-
-            </v-toolbar-items>
+            </v-toolbar-items>  
         </v-toolbar>
       </div>
 
       <div >
         <v-carousel >
           <v-carousel-item
-            v-for="(item,i) in items"
+            v-for="(item,i) in carouselItems"
             :key="i"
             reverse-transition="fade-transition"
             transition="fade-transition"
           >
-          <img :src="item.src" class="carrousel-img"/>
+            <img :src="item.src" class="carrousel-img"/>
           
           </v-carousel-item>
         </v-carousel>
@@ -69,48 +79,62 @@
             class="white--text"
             @click.prevent="getProducts"
           >
-          Our Products
+            Our Products
           </v-btn>
         </div>
+
+        <template v-if="productsContainer">
+          <v-list class="list" two-line>
+            <v-layout class="row" row wrap>
+              <template v-for="(product, index) in products" >
+                <v-flex xs2 pa-1 :key="index">
+                  <v-hover>
+                    <v-card slot-scope="{hover}" class="mx-auto" color="gray lighten-1" max-width="600" height="400" >
+                      <v-badge v-if="product.id === 1"style=" margin-left:10px;z-index:2;margin-top:20px;position: absolute;"color='black'>
+                        <span slot="badge">10% Discount on 3</span>
+                      </v-badge>
+                      <v-img style="z-index: 1;":src="product.image" height=200 contain>
+                        
+                        <v-expand-transition>
+                          <div v-if="hover" class="d-flex transition-fast-in-fast-out draken-2 display-3 v-card--reveal display3 white--text" >
+                            ${{product.price}}
+                          </div>
+                        </v-expand-transition>
+                      </v-img>
         
-        <v-list class="list" two-line>
-          <v-layout class="row" row wrap>
-            <template v-for="(product, index) in products" >
-              <v-flex xs2 pa-1 :key="index">
-                <v-hover>
-                  <v-card slot-scope="{hover}" class="mx-auto" color="gray lighten-1" max-width="600" height='400' >
-                    <v-img :src="product.image" :aspect-ratio="16/9">
-                      <v-expand-transition>
-                        <div v-if="hover" class="d-flex transition-fast-in-fast-out draken-2 display-3 v-card--reveal display3 white--text" >
-                          ${{product.price}}
-                        </div>
-                      </v-expand-transition>
-                    </v-img>
-      
-                    <v-card-text class="pt-4" >
-                      <v-btn absolute color="#242424" class="white--text" fab medium right top @click.prevent="addProduct(product)">
-                        <v-icon>
-                          {{basket}}
-                        </v-icon>
-                      </v-btn>
+                      <v-card-text class="pt-4" >
+                        <v-btn style="z-index: 1;" absolute color="#242424" class="white--text" fab medium right top @click.prevent="addProduct(product)">
+                          <v-icon @click="snackbarProduct=true">
+                            {{icons.cartPlus}}
+                          </v-icon>
+                        </v-btn>
+                        
+                        <h3 class="display-1 font-weight-light  #1E1E1E--text mb-2">{{product.title}}</h3>
+                        
+                        <div class="font-weight-light mb-2">{{product.description}}</div>
+                        <div class="font-weight-light mb-2">Weight: {{product.weight}} g</div>
+        
+                      </v-card-text>
                       
-      
-                      <h3 class="display-1 font-weight-light  #1E1E1E--text mb-2">{{product.title}}</h3>
-                      <div class="font-weight-light mb-2">{{product.description}}</div>
-                      <div class="font-weight-light mb-2">Weight: {{product.weight}} g</div>
-      
-                    </v-card-text>
-                    
-                  </v-card>
-                </v-hover>
-              </v-flex>
-            </template>
-          </v-layout>
-        </v-list>
+                    </v-card>
+                  </v-hover>
+                </v-flex>
+              </template>
+            </v-layout>
+          </v-list>
+        </template>
       </div>
-      <v-divider light></v-divider>
+
+      <v-snackbar
+        v-model="snackbarProduct"
+        :timeout="timeout"
+      >
+        Product added to your cart!
+      </v-snackbar>
+
       <v-footer
         padless
+        fixed
       >
         <v-card
           flat
@@ -119,55 +143,125 @@
         >
           <v-card-text>
             <v-btn
-              v-for="icon in icons"
-              :key="icon"
+              href="https://www.facebook.com/arthur.dionizio.39/"
               class="mx-4 white--text"
               icon
-              
             >
               <v-icon size="24px">
-                {{ icon }}
+                {{ socialIcons.facebook }}
+              </v-icon>
+            </v-btn>
+            <v-btn
+              href="https://www.linkedin.com/in/arthur-dion%C3%ADzio-4162541ab/"
+              class="mx-4 white--text"
+              icon
+            >
+              <v-icon size="24px">
+                {{ socialIcons.linkedin }}
+              </v-icon> 
+            </v-btn>
+            <v-btn
+              href="https://www.instagram.com/diionart/"
+              class="mx-4 white--text"
+              icon
+            > 
+              <v-icon size="24px">
+                {{ socialIcons.instagram }}
               </v-icon>
             </v-btn>
           </v-card-text>
-
-  
-    
         </v-card>
       </v-footer>
 
       <v-row justify="center">
         <v-dialog
           v-model="dialog"
-          width="750"
+          width="500"
+          overlay-opacity="0.8"
         >
-          <v-card style="background-color: #0B0B0B;">
+          <v-card class="card">
             <v-container>
-              
-              <v-card-title class="white--text" style="justify-content: center;">Your basket</v-card-title>
 
-              <v-list two-line style="background-color: #0B0B0B;">
-                <template v-for="(param, index) in params">
-                  <v-list-item :key="param.id">
-                    <v-avatar
-                      size="40"
-                    >
-                      <img :src="param.image">
-                    </v-avatar>
-                    <v-divider></v-divider>
-                    <v-list-item-title class="white--text">{{param.title}}</v-list-item-title>
-                    
-                    <v-list-item-title class="white--text">
-                      {{param.price}}$
-                    </v-list-item-title>
+              <v-card-title class="white--text">Your Cart</v-card-title>
+                <template v-if="cartProducts.length !== 0">
+                  <v-list two-line class="list-container">
+                  
+                    <template v-for="(cartProduct, index) in cartProducts">
+                      <v-list-item :key="cartProduct.product.id">
+                        <v-avatar class="avatar-container"
+                          size="40"
+                        >
+                          <img :src="cartProduct.product.image">
+                        </v-avatar>
+                        <v-divider></v-divider>
+                        <v-list-item-title class="white--text">{{cartProduct.product.title}}</v-list-item-title>
+                        
+                        <v-list-item-title class="white--text">
+                          {{cartProduct.product.price}}$
+                        </v-list-item-title>
 
-                  </v-list-item>
-                  <v-divider dark></v-divider>
-                 
+                        <v-list-item-title class="white--text">
+                          {{cartProduct.qty}}
+                        </v-list-item-title>
+
+                        <v-list-item-title class="white--text">
+                          {{cartProduct.qty * cartProduct.product.price}}$
+                        </v-list-item-title>
+
+                        <v-btn color="#0B0B0B" elevation="0" x-small @click.prevent="removeProduct(cartProduct.product)">
+                          <v-icon size="24px" class="white--text">
+                            {{icons.thrash}}
+                          </v-icon>
+                        </v-btn>
+
+                      </v-list-item>
+                      <v-divider dark></v-divider>
+                    </template>
+                  </v-list>
+
+                  <div>
+                    <div class="white--text total">
+                      <div class="text block">
+                        <h4>Total: {{discountFlag ? totalDiscount : total }}$</h4>
+                        <h6 v-if="discountFlag" class="green--text"> 10% discount applied!</h6>
+                      </div >
+                    </div>
+      
+                    <div class="checkout container" >
+                      <v-btn
+                        type="button"
+                        color="#0B0B0B"
+                        large
+                        elevation="10"
+                        rounded
+                        class="white--text"
+                        @click="submitCartProduct(cartProducts);"
+                      >
+                        <v-icon size="24px" class="icon">
+                          {{ icons.card }}
+                        </v-icon>
+                        Checkout
+                      </v-btn>
+                    </div>
+                  </div>
+
+                  <v-snackbar
+                    v-model="snackbarSubmit"
+                    :timeout="timeout"
+                  >
+                    Your purchase was successfull!
+                  </v-snackbar>
                 </template>
-                
-              </v-list>
-        
+
+                <template v-if="cartProducts.length === 0">
+                  <div class="emptyCart container">
+                    <v-icon size="75px" class="white--text">
+                      {{ icons.emptyCart }}
+                    </v-icon>
+                    <h2 class="white--text">Your Cart is empty</h2>
+                  </div>
+                </template>
+
             </v-container>
           </v-card>
         </v-dialog>
@@ -180,51 +274,123 @@
       el: '#app',
       vuetify: new Vuetify(),
       data: () => ({
-        params:[],
-        products: [],
-        dialog:false,
-        icons: [
-          'mdi-facebook',
-          'mdi-linkedin',
-          'mdi-instagram',
-        ],
-        basket:"mdi-basket",
-        card:"mdi-credit-card",
+        //state declarations
+        productsContainer:false,
+        discountFlag:false,
+        snackbarSubmit:false,
+        snackbarProduct:false,
         drawer:false,
-        number:0,
+        dialog:false,
+        cartProducts:[],
+        products: [],
+        timeout: 2000,
+        totalDiscount:0,
         total:0,
-        items: [
-        {
-          src: './assets/suit.jpg',
+        socialIcons: {
+          facebook:'mdi-facebook',
+          linkedin:'mdi-linkedin',
+          instagram:'mdi-instagram',
         },
-        {
-          src: './assets/banner.jpg',
+        icons:{
+          cart:"mdi-cart",
+          cartPlus:"mdi-cart-plus",
+          card:"mdi-credit-card",
+          emptyCart:"mdi-cart-outline",
+          thrash:"mdi-delete",
         },
-        {
-          src: 'https://esacroatia.com/app/uploads/2016/03/tailor-made-tours.jpg',
-        },
-      ],
-        
+        carouselItems: [{
+            src: './assets/suit.jpg',
+          },{
+            src: './assets/banner.jpg',
+          },
+        ],
       }),
       methods:{
+        //Get request from the api
         getProducts() {
           axios.get('http://localhost:3000/products').then((response)=>{
-            this.products = response.data;
+            //sets the products state with the responde.data from the api
+            this.products = response.data
           })
-          window.scroll(0,500)
+          //flag to render the products div in the screen
+          this.productsContainer=true;
+          //setTimeout to scroll automatically to the products div
+          setTimeout(()=>{
+            window.scroll(0,500)
+          },200)
         },
-        addProduct(type){
-          this.params.push(type)
-          console.log(this.params);
-          this.total = this.total + type.price;
-          this.number = this.number+1;
-          console.log(this.total);
-          
+        //Add product to the cart function
+        addProduct(product){
+          //logic to find if the item is already on the cart, if it is, raise it's quantity instead of duplicating the item
+          const itemAdded = this.cartProducts.find(item =>{
+            if(item.product.id === product.id){
+              item.qty++;
+              //logic to apply discount if there's more than two jackets
+              if(item.product.id===1 && item.qty>2){
+                this.discountFlag=true;
+              }
+              return item;
+            }
+          });
+          //if there the item isn't on the cart yet, add it with a single quantity 
+          if(!itemAdded){
+            this.cartProducts.push({
+              product: product,
+              qty: 1,
+            })
+          }
+          //keeping total values with and without discont
+          this.total = this.total + product.price;
+          this.totalDiscount = this.discountFlag ? (this.total-this.total*0.1) : this.total;
         },
+        //remove from cart function
+        removeProduct(product){
+          let flag=null;
+          //logic to see if the item is already on the cart to remove from the quantity
+          const itemRemoved = this.cartProducts.find((item,index) =>{
+            if(item.product.id === product.id){
+              if(item.qty > 1){
+                item.qty--;
+                //if there's more than 2 jackets add discount
+                if(item.product.id === 1 && item.qty ===2){
+                  this.discountFlag=false;
+                }
+                
+                return item;
+              }else{
+                //if the item has a single unit
+                flag=index;
+              }
+              
+            }
+          });
+          //splice function to remove the single unit product from the array
+          if(flag !== null)
+            this.cartProducts.splice(flag,1);
+
+          this.total = this.total - product.price;
+          this.totalDiscount = this.totalDiscount - product.price;
+        },
+        //function to submit order to the api
+        submitCartProduct(order){
+          //turn snackbar flag on
+          this.snackbarSubmit=true;
+          //format the body sent to the api
+          const body={
+            totalPrice: this.discountFlag ? this.totalDiscount : this.total,
+            products:order,
+          }
+          //api post call
+          setTimeout(() => {
+            axios.post('http://localhost:3000/orders', body).then((response)=>{
+              console.log(response);
+            }).catch((er)=>{
+              console.log(er);
+            })
+          }, 2500);
+        }
       }
     })
   </script>
-
-
 </body>
 </html>
