@@ -22,7 +22,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 
-  <div id="app" >
+  <div id="app">
     <v-app id="inspire">
       <div >
         <v-toolbar class="toolbar">
@@ -63,7 +63,7 @@
         </v-carousel>
       </div>
 
-      <div >
+      <div style="background-color:#0B0B0B">
         <div class = "products-btn" >
           <v-btn
             color="#0B0B0B"
@@ -176,7 +176,7 @@
           <v-card class="card">
             <v-container>
 
-              <v-card-title class="white--text">Your Cart</v-card-title>
+              <v-card-title style="overflow-x: hidden;"class="white--text">Your Cart</v-card-title>
                 <template v-if="cartProducts.length !== 0">
                   <v-list two-line class="list-container">
                   
