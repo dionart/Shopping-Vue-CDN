@@ -24,6 +24,8 @@
 
   <div id="app">
     <v-app id="inspire">
+
+      <!-- Footer Html -->
       <div >
         <v-toolbar class="toolbar">
           <a target="_blank" href="https://tailor.com.au/">
@@ -48,7 +50,8 @@
             </v-toolbar-items>  
         </v-toolbar>
       </div>
-
+      
+      <!-- Caroussel -->
       <div >
         <v-carousel >
           <v-carousel-item
@@ -63,6 +66,7 @@
         </v-carousel>
       </div>
 
+      <!--Main page with button and products -->
       <div style="background-color:#0B0B0B">
         <div class = "products-btn" >
           <v-btn
@@ -120,6 +124,23 @@
         </template>
       </div>
 
+      <!-- Floating button html -->
+      <div  class = "products-btn-float" >
+        <v-btn
+          v-if="products.length!==0"
+          color="#0B0B0B"
+          large
+          elevation="10"
+          rounded
+          class="white--text"
+          @click.prevent="dialog=true"
+        >
+          <v-icon style="margin-top: -5px;"color="#fff">{{icons.cart}}</v-icon> 
+          Your cart
+        </v-btn>
+      </div>
+
+      <!-- Product added snackbar -->
       <v-snackbar
         v-model="snackbarProduct"
         :timeout="timeout"
@@ -127,6 +148,7 @@
         Product added to your cart!
       </v-snackbar>
 
+      <!-- Footer html -->
       <v-footer
         padless
         fixed
@@ -171,6 +193,7 @@
         </v-card>
       </v-footer>
 
+      <!-- Modal html -->
       <v-row justify="center">
         <v-dialog
           v-model="dialog"
@@ -178,8 +201,15 @@
           overlay-opacity="0.8"
         >
           <v-card class="card">
-            <v-container>
+            <v-btn
+              icon
+              dark
+              @click="dialog = false"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
 
+            <v-container>
               <v-card-title style="overflow-x: hidden;"class="white--text">Your Cart</v-card-title>
                 <template v-if="cartProducts.length !== 0">
                   <v-list two-line class="list-container">

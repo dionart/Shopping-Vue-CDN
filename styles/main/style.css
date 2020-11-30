@@ -35,6 +35,14 @@
   position: relative;
 }
 
+#inspire .products-btn-float {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 80px;
+  right: 200px;
+}
+
 @media screen and (max-height: 800px) {
   #inspire .products-btn {
     padding-top: 50px;
