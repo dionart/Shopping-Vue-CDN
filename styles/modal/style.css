@@ -39,3 +39,7 @@
   text-align: center;
   padding-bottom: 30px;
 }
+
+.v-dialog.v-dialog--active {
+  overflow-x: hidden;
+}

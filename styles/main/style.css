@@ -34,3 +34,15 @@
 #inspire .list .row .pt-4 {
   position: relative;
 }
+
+@media screen and (max-height: 800px) {
+  #inspire .products-btn {
+    padding-top: 50px;
+  }
+}
+
+@media screen and (max-height: 722px) {
+  #inspire .list {
+    height: 100vh;
+  }
+}

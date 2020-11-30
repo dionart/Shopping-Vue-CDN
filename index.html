@@ -26,12 +26,12 @@
     <v-app id="inspire">
       <div >
         <v-toolbar class="toolbar">
-          <a href="https://tailor.com.au/">
+          <a target="_blank" href="https://tailor.com.au/">
             <img src="./assets/germanicos-white-logo.svg">
           </a>
             <v-spacer></v-spacer>
             <v-toolbar-items >
-                <v-btn href="https://tailor.com.au/" text color="#FFF">
+                <v-btn href="https://tailor.com.au/" target="_blank" text color="#FFF">
                   Website
                 </v-btn>
                 <v-btn text color="#FFF" @click.prevent="getProducts">
@@ -83,12 +83,13 @@
               <template v-for="(product, index) in products" >
                 <v-flex xs2 pa-1 :key="index">
                   <v-hover>
-                    <v-card slot-scope="{hover}" class="mx-auto" color="gray lighten-1" max-width="600" height="400" >
+                    <v-card slot-scope="{hover}" class="mx-auto" color="gray lighten-1" max-width="600" height="400">
+
                       <v-badge v-if="product.id === 1"style=" margin-left:10px;z-index:2;margin-top:20px;position: absolute;"color='black'>
                         <span slot="badge">10% Discount on 3</span>
                       </v-badge>
+
                       <v-img style="z-index: 1;":src="product.image" height=200 contain>
-                        
                         <v-expand-transition>
                           <div v-if="hover" class="d-flex transition-fast-in-fast-out draken-2 display-3 v-card--reveal display3 white--text" >
                             ${{product.price}}
@@ -138,6 +139,7 @@
           <v-card-text>
             <v-btn
               href="https://www.facebook.com/arthur.dionizio.39/"
+              target="_blank"
               class="mx-4 white--text"
               icon
             >
@@ -147,6 +149,7 @@
             </v-btn>
             <v-btn
               href="https://www.linkedin.com/in/arthur-dion%C3%ADzio-4162541ab/"
+              target="_blank"
               class="mx-4 white--text"
               icon
             >
@@ -156,6 +159,7 @@
             </v-btn>
             <v-btn
               href="https://www.instagram.com/diionart/"
+              target="_blank"
               class="mx-4 white--text"
               icon
             > 
