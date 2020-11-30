@@ -201,13 +201,6 @@
           overlay-opacity="0.8"
         >
           <v-card class="card">
-            <v-btn
-              icon
-              dark
-              @click="dialog = false"
-            >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
 
             <v-container>
               <v-card-title style="overflow-x: hidden;"class="white--text">Your Cart</v-card-title>
@@ -401,21 +394,19 @@
         },
         //function to submit order to the api
         submitCartProduct(order){
-          //turn snackbar flag on
-          this.snackbarSubmit=true;
           //format the body sent to the api
           const body={
             totalPrice: this.discountFlag ? this.totalDiscount : this.total,
             products:order,
           }
           //api post call
-          setTimeout(() => {
-            axios.post('http://localhost:3000/orders', body).then((response)=>{
-              console.log(response);
-            }).catch((er)=>{
-              console.log(er);
-            })
-          }, 2500);
+          axios.post('http://localhost:3000/orders', body).then((response)=>{
+            console.log(response);
+            this.snackbarSubmit=true;
+          }).catch((er)=>{
+            console.log(er);
+          })
+          
         }
       }
     })
